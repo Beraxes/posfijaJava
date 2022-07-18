@@ -9,20 +9,21 @@ package ejpila;
  * @author beraxes
  */
 public class nodo {
-    private String dato;
+
+    private String Dato;
     public nodo enlace;
-    
+
     public nodo(){
-        dato="";
+        Dato ="";
         enlace=null;
     }
 
-    public String getExpresion() {
-        return dato;
+    public String getDato() {
+        return Dato;
     }
 
-    public void setExpresion(String dato) {
-        this.dato = dato;
+    public void setDato(String Dato) {
+        this.Dato = Dato;
     }
 
     public nodo getEnlace() {
@@ -32,9 +33,7 @@ public class nodo {
     public void setEnlace(nodo enlace) {
         this.enlace = enlace;
     }
-
-    
     public void mostrar(){
-        System.out.println(getExpresion());
+        System.out.println(getDato());
     }
 }
