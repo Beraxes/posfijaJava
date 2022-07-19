@@ -51,10 +51,9 @@ public class EjPila {
                     temp = cima;
                     if (aux.equals("")) {
                         aux = aux + cima.getDato();
-                    }else{
+                    } else {
                         aux = aux + ", " + cima.getDato();
                     }
-                    
 
                     cima = cima.getEnlace();
                     temp.setEnlace(null);
@@ -72,8 +71,7 @@ public class EjPila {
         String aux = "";
         if (cima != null) {
 
-           // cima.mostrar();
-
+            // cima.mostrar();
             if (cima == falda) {
                 aux = aux + cima.getDato();
                 cima = null;
@@ -92,7 +90,7 @@ public class EjPila {
         return aux;
     }
 
-    public static int prioridad(String signo) {
+    public static int asignarPrioridad(String signo) {
         int valorPrioridad = -1;
         if (signo.equals("+") || signo.equals("-")) {
             valorPrioridad = 1;
@@ -102,6 +100,26 @@ public class EjPila {
             valorPrioridad = 3;
         }
         return valorPrioridad;
+    }
+
+    public static void compararPrioridad(String epos, String aux, EjPila pila) {
+        if (pila.cima == null) {
+            pila.apilar(aux);
+        } else {
+            int operador = asignarPrioridad(aux);
+            String salientePila = pila.desapilarElemento();
+            int precedencia = asignarPrioridad(salientePila);
+            if (operador == precedencia) {
+                epos = epos + vacioComilla(epos, salientePila);
+                pila.apilar(aux);
+            } else if (operador > precedencia) {
+                pila.apilar(aux);
+            } else {
+                epos = epos + vacioComilla(epos, salientePila);
+                pila.apilar(aux);
+            }
+        }
+
     }
 
     public static String vacioComilla(String cadena_epos, String cadena_aux) {
@@ -133,38 +151,51 @@ public class EjPila {
                 } while (!dato.equals("("));
 
             } else if (aux.equals("+") || aux.equals("-") || aux.equals("*") || aux.equals("/") || aux.equals("^")) {
+                int operador = asignarPrioridad(aux);
                 
-                if (pila.cima == null) {
-                    pila.apilar(aux);
-                } else {
-                    int operador = prioridad(aux);
-                    String salientePila = pila.desapilarElemento();
-                    int precedencia = prioridad(salientePila);
-                    if (operador == precedencia) {
-                        epos = epos + vacioComilla(epos, salientePila);
+                do {
+                    if (pila.cima == null) {
                         pila.apilar(aux);
-                    } else if (operador > precedencia) {
-                        pila.apilar(aux);
+                        aux = "";
                     } else {
-                        epos = epos + vacioComilla(epos, salientePila);
-                        pila.apilar(aux);
-                    }
-                }
 
+                        String salientePila = pila.desapilarElemento();
+                        if (salientePila.equals("(")) {
+                            pila.apilar(salientePila);
+                            pila.apilar(aux);
+                            aux = "";
+                        } else {
+                            int precedencia = asignarPrioridad(salientePila);
+                            if (operador == precedencia) {
+                                epos = epos + vacioComilla(epos, salientePila);
+
+
+                            } else if (operador > precedencia) {
+                                pila.apilar(salientePila);
+                                pila.apilar(aux);
+                                aux = "";
+                            } else {
+                                epos = epos + vacioComilla(epos, salientePila);
+
+                            }
+                        }
+                    }
+
+                } while ( !aux.equals("") );
             } else {
                 epos = epos + vacioComilla(epos, aux);
 
             }
 
         }
-        
+
         String resto = "";
         if (pila.cima != null) {
             resto = pila.desapilarTodo();
         }
-        
+
         epos = epos + vacioComilla(epos, resto);
-        
+
         System.out.println(epos);
 
     }
