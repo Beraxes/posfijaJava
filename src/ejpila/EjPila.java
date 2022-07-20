@@ -43,17 +43,13 @@ public class EjPila {
                 //cima.mostrar();
 
                 if (cima == falda) {
-                    aux = aux + cima.getDato();
+                    aux += vacioComilla(aux, cima.getDato());
                     cima = null;
                     falda = null;
 
                 } else {
                     temp = cima;
-                    if (aux.equals("")) {
-                        aux = aux + cima.getDato();
-                    } else {
-                        aux = aux + ", " + cima.getDato();
-                    }
+                    aux += vacioComilla(aux, cima.getDato());
 
                     cima = cima.getEnlace();
                     temp.setEnlace(null);
@@ -110,19 +106,19 @@ public class EjPila {
             String salientePila = pila.desapilarElemento();
             int precedencia = asignarPrioridad(salientePila);
             if (operador == precedencia) {
-                epos = epos + vacioComilla(epos, salientePila);
+                epos = epos + pila.vacioComilla(epos, salientePila);
                 pila.apilar(aux);
             } else if (operador > precedencia) {
                 pila.apilar(aux);
             } else {
-                epos = epos + vacioComilla(epos, salientePila);
+                epos = epos + pila.vacioComilla(epos, salientePila);
                 pila.apilar(aux);
             }
         }
 
     }
 
-    public static String vacioComilla(String cadena_epos, String cadena_aux) {
+    public String vacioComilla(String cadena_epos, String cadena_aux) {
         String opcion = "";
         if (cadena_epos.equals("")) {
             opcion = opcion + cadena_aux;
@@ -146,13 +142,13 @@ public class EjPila {
                 do {
                     dato = pila.desapilarElemento();
                     if (!dato.equals("(")) {
-                        epos = epos + vacioComilla(epos, aux);
+                        epos = epos + pila.vacioComilla(epos, dato);
                     }
                 } while (!dato.equals("("));
 
             } else if (aux.equals("+") || aux.equals("-") || aux.equals("*") || aux.equals("/") || aux.equals("^")) {
                 int operador = asignarPrioridad(aux);
-                
+
                 do {
                     if (pila.cima == null) {
                         pila.apilar(aux);
@@ -167,23 +163,22 @@ public class EjPila {
                         } else {
                             int precedencia = asignarPrioridad(salientePila);
                             if (operador == precedencia) {
-                                epos = epos + vacioComilla(epos, salientePila);
-
+                                epos = epos + pila.vacioComilla(epos, salientePila);
 
                             } else if (operador > precedencia) {
                                 pila.apilar(salientePila);
                                 pila.apilar(aux);
                                 aux = "";
                             } else {
-                                epos = epos + vacioComilla(epos, salientePila);
+                                epos = epos + pila.vacioComilla(epos, salientePila);
 
                             }
                         }
                     }
 
-                } while ( !aux.equals("") );
+                } while (!aux.equals(""));
             } else {
-                epos = epos + vacioComilla(epos, aux);
+                epos = epos + pila.vacioComilla(epos, aux);
 
             }
 
@@ -194,7 +189,7 @@ public class EjPila {
             resto = pila.desapilarTodo();
         }
 
-        epos = epos + vacioComilla(epos, resto);
+        epos = epos + pila.vacioComilla(epos, resto);
 
         System.out.println(epos);
 
