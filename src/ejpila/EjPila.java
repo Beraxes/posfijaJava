@@ -4,7 +4,6 @@
  */
 package ejpila;
 
-import java.util.Stack;
 import javax.swing.*;
 
 /**
@@ -98,26 +97,6 @@ public class EjPila {
         return valorPrioridad;
     }
 
-    public static void compararPrioridad(String epos, String aux, EjPila pila) {
-        if (pila.cima == null) {
-            pila.apilar(aux);
-        } else {
-            int operador = asignarPrioridad(aux);
-            String salientePila = pila.desapilarElemento();
-            int precedencia = asignarPrioridad(salientePila);
-            if (operador == precedencia) {
-                epos = epos + pila.vacioComilla(epos, salientePila);
-                pila.apilar(aux);
-            } else if (operador > precedencia) {
-                pila.apilar(aux);
-            } else {
-                epos = epos + pila.vacioComilla(epos, salientePila);
-                pila.apilar(aux);
-            }
-        }
-
-    }
-
     public String vacioComilla(String cadena_epos, String cadena_aux) {
         String opcion = "";
         if (cadena_epos.equals("")) {
@@ -171,6 +150,7 @@ public class EjPila {
                                 aux = "";
                             } else {
                                 epos = epos + pila.vacioComilla(epos, salientePila);
+                                aux = "";
 
                             }
                         }
